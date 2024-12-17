@@ -32,6 +32,7 @@ const calculate = ({ price: p, roi, numoi: n, nocostemi, fee }) => {
       pr += _pr;
       return int;
     });
+  balance -= emidisc;
   const plan = intp.map((int, index) => {
     const ppm = emi - int;
     balance -= ppm;
