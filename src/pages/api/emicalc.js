@@ -9,6 +9,7 @@ const check = (arr1) => {
 };
 
 const calculate = ({ price: p, roi, numoi: n, nocostemi, fee }) => {
+  n = Number(n);
   const r = roi / (12 * 100);
   let balance = p;
   let pr = 0;
