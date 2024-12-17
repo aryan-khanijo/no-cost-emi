@@ -54,7 +54,7 @@ const EmiCalculator = () => {
             />
           </div>
           <div>
-            <label className="block text-gray-700">ROI (%):</label>
+            <label className="block text-gray-700">Interest (%):</label>
             <input
               type="number"
               name="roi"
