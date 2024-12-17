@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import EmiResult from "@/component/emiresult";
+import EmiResult from "@/components/emiresult";
 import "@/styles/globals.css";
 
 const EmiCalculator = () => {

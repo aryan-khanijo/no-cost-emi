@@ -10,19 +10,19 @@ const EmiResult = ({ data }) => {
       </div>
     );
 
-//   const exportToPDF = () => {
-//     const doc = new jsPDF("p", "pt", "a4");
+  //   const exportToPDF = () => {
+  //     const doc = new jsPDF("p", "pt", "a4");
 
-//     // Capture the content of the HTML element you want to export as PDF
-//     doc.html(contentRef.current, {
-//       callback: function (doc) {
-//         doc.save("download.pdf"); // Save the PDF with a custom name
-//       },
-//       margin: [1, 1, 1, 1],
-//       x: 1,
-//       y: 1,
-//     });
-//   };
+  //     // Capture the content of the HTML element you want to export as PDF
+  //     doc.html(contentRef.current, {
+  //       callback: function (doc) {
+  //         doc.save("download.pdf"); // Save the PDF with a custom name
+  //       },
+  //       margin: [1, 1, 1, 1],
+  //       x: 1,
+  //       y: 1,
+  //     });
+  //   };
 
   const {
     plan,
@@ -67,7 +67,7 @@ const EmiResult = ({ data }) => {
         </div>
 
         {/* EMI Plan Table */}
-        <div className="overflow-auto max-h-96" style={{ overflow: "auto" }}>
+        <div className="overflow-auto max-h-96">
           <h3 className="text-lg font-semibold mb-2 text-gray-700">EMI Plan</h3>
           <table className="w-full table-auto border-collapse border border-gray-200 text-sm">
             <thead>
@@ -83,7 +83,7 @@ const EmiResult = ({ data }) => {
                 ].map((header) => (
                   <th
                     key={header}
-                    className="border border-black p-2 text-gray-700"
+                    className="border border-gray-300 p-2 text-gray-700"
                   >
                     {header}
                   </th>
@@ -93,25 +93,25 @@ const EmiResult = ({ data }) => {
             <tbody>
               {plan.map((item) => (
                 <tr key={item.month} className="even:bg-gray-50">
-                  <td className="border border-black p-2 text-center text-gray-700">
+                  <td className="border border-gray-300 p-2 text-center text-gray-700">
                     {item.month}
                   </td>
-                  <td className="border border-black p-2 text-center text-gray-700">
+                  <td className="border border-gray-300 p-2 text-center text-gray-700">
                     {item.emi}
                   </td>
-                  <td className="border border-black p-2 text-center text-gray-700">
+                  <td className="border border-gray-300 p-2 text-center text-gray-700">
                     {item.ppm}
                   </td>
-                  <td className="border border-black p-2 text-center text-gray-700">
+                  <td className="border border-gray-300 p-2 text-center text-gray-700">
                     {item.ipm}
                   </td>
-                  <td className="border border-black p-2 text-center text-gray-700">
+                  <td className="border border-gray-300 p-2 text-center text-gray-700">
                     {item.balance}
                   </td>
-                  <td className="border border-black p-2 text-center text-gray-700">
+                  <td className="border border-gray-300 p-2 text-center text-gray-700">
                     {item.toi}
                   </td>
-                  <td className="border border-black p-2 text-center text-gray-700">
+                  <td className="border border-gray-300 p-2 text-center text-gray-700">
                     {item.tpmit}
                   </td>
                 </tr>
