@@ -4,13 +4,13 @@ import EmiResult from "@/component/emiresult";
 import "@/styles/globals.css";
 
 const EmiCalculator = () => {
-	const [formData, setFormData] = useState({
-		price: 55899,
-		roi: 14,
-		numoi: 12,
-		nocostemi: true,
-		fee: 199,
-	  });
+  const [formData, setFormData] = useState({
+    price: 55899,
+    roi: 14,
+    numoi: 12,
+    nocostemi: true,
+    fee: 199,
+  });
   const [response, setResponse] = useState(null);
   const [error, setError] = useState("");
 
@@ -40,7 +40,7 @@ const EmiCalculator = () => {
       </h1>
       <form
         onSubmit={handleSubmit}
-        className="bg-white shadow-lg rounded-lg p-6"
+        className="bg-white shadow-lg rounded-lg p-6 w-full"
       >
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div>

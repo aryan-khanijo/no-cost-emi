@@ -19,7 +19,7 @@ const EmiResult = ({ data }) => {
   } = data;
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-6 mt-8">
+    <div className="w-full bg-white shadow-md rounded-lg p-6 mt-8">
       <h2 className="text-2xl font-bold text-center mb-4 text-blue-600">
         EMI Calculation Result
       </h2>
@@ -63,7 +63,7 @@ const EmiResult = ({ data }) => {
               ].map((header) => (
                 <th
                   key={header}
-                  className="border border-gray-300 p-2 text-gray-700"
+                  className="border border-black p-2 text-gray-700"
                 >
                   {header}
                 </th>
@@ -73,25 +73,25 @@ const EmiResult = ({ data }) => {
           <tbody>
             {plan.map((item) => (
               <tr key={item.month} className="even:bg-gray-50">
-                <td className="border border-gray-300 p-2 text-center text-gray-700">
+                <td className="border border-black p-2 text-center text-gray-700">
                   {item.month}
                 </td>
-                <td className="border border-gray-300 p-2 text-center text-gray-700">
+                <td className="border border-black p-2 text-center text-gray-700">
                   {item.emi}
                 </td>
-                <td className="border border-gray-300 p-2 text-center text-gray-700">
+                <td className="border border-black p-2 text-center text-gray-700">
                   {item.ppm}
                 </td>
-                <td className="border border-gray-300 p-2 text-center text-gray-700">
+                <td className="border border-black p-2 text-center text-gray-700">
                   {item.ipm}
                 </td>
-                <td className="border border-gray-300 p-2 text-center text-gray-700">
+                <td className="border border-black p-2 text-center text-gray-700">
                   {item.balance}
                 </td>
-                <td className="border border-gray-300 p-2 text-center text-gray-700">
+                <td className="border border-black p-2 text-center text-gray-700">
                   {item.toi}
                 </td>
-                <td className="border border-gray-300 p-2 text-center text-gray-700">
+                <td className="border border-black p-2 text-center text-gray-700">
                   {item.tpmit}
                 </td>
               </tr>
