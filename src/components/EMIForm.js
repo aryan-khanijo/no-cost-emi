@@ -87,26 +87,35 @@ const EMIForm = ({ formData, handleChange, handleSubmit, isDarkMode }) => {
           />
         </div>
 
-        {/* No Cost EMI Checkbox */}
-        <div className={`col-span-1 md:col-span-2 flex items-center justify-center p-4 rounded-xl border-2 transition-all duration-300 ${
-          isDarkMode
-            ? 'bg-gradient-to-r from-cyan-900/50 to-blue-900/50 border-cyan-600'
-            : 'bg-gradient-to-r from-cyan-50 to-blue-50 border-cyan-200'
-        }`}>
-          <input
-            type="checkbox"
-            name="nocostemi"
-            checked={formData.nocostemi}
-            onChange={handleChange}
-            className={`mr-3 w-5 h-5 rounded focus:ring-4 ${
-              isDarkMode
-                ? 'text-cyan-400 border-2 border-cyan-500 focus:ring-cyan-400/30 bg-slate-700'
-                : 'text-cyan-600 border-2 border-cyan-300 focus:ring-cyan-500'
-            }`}
-          />
-          <label className={`font-semibold text-lg ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
-            🎯 No Cost EMI Option
-          </label>
+        {/* No Cost EMI Toggle */}
+        <div 
+          onClick={() => handleChange({ 
+            target: { 
+              name: 'nocostemi', 
+              type: 'checkbox', 
+              checked: !formData.nocostemi 
+            } 
+          })}
+          className={`col-span-1 md:col-span-2 flex items-center justify-center p-6 rounded-xl border-2 cursor-pointer transition-all duration-300 transform hover:scale-105 hover:shadow-lg ${
+            formData.nocostemi
+              ? (isDarkMode
+                  ? 'bg-gradient-to-r from-cyan-600/80 to-blue-600/80 border-cyan-400 shadow-lg shadow-cyan-500/25'
+                  : 'bg-gradient-to-r from-cyan-400/80 to-blue-400/80 border-cyan-500 shadow-lg shadow-cyan-400/25')
+              : (isDarkMode
+                  ? 'bg-gradient-to-r from-slate-700/50 to-slate-800/50 border-slate-600 hover:border-cyan-600'
+                  : 'bg-gradient-to-r from-slate-100/50 to-slate-200/50 border-slate-300 hover:border-cyan-400')
+          }`}
+        >
+          <div className="flex items-center justify-center">
+            {/* Label */}
+            <span className={`font-semibold text-lg transition-all duration-300 ${
+              formData.nocostemi
+                ? 'text-white'
+                : (isDarkMode ? 'text-slate-300' : 'text-slate-700')
+            }`}>
+              🎯 No Cost EMI Option
+            </span>
+          </div>
         </div>
       </div>
 
