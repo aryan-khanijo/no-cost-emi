@@ -89,13 +89,7 @@ const EMIForm = ({ formData, handleChange, handleSubmit, isDarkMode }) => {
 
         {/* No Cost EMI Toggle */}
         <div 
-          onClick={() => handleChange({ 
-            target: { 
-              name: 'nocostemi', 
-              type: 'checkbox', 
-              checked: !formData.nocostemi 
-            } 
-          })}
+          onClick={toggleNoCostEMI}
           className={`col-span-1 md:col-span-2 flex items-center justify-center p-6 rounded-xl border-2 cursor-pointer transition-all duration-300 transform hover:scale-105 hover:shadow-lg ${
             formData.nocostemi
               ? (isDarkMode
