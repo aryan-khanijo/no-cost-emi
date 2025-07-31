@@ -1,8 +1,10 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { jsPDF } from "jspdf";
 
 const EmiResult = ({ data }) => {
   const contentRef = useRef();
+  const [isPdfMode, setIsPdfMode] = useState(false);
+  
   if (!data)
     return (
       <div className="text-center text-gray-500">
@@ -10,29 +12,45 @@ const EmiResult = ({ data }) => {
       </div>
     );
 
-  //   const exportToPDF = () => {
-  //     const doc = new jsPDF("p", "pt", "a4");
-
-  //     // Capture the content of the HTML element you want to export as PDF
-  //     doc.html(contentRef.current, {
-  //       callback: function (doc) {
-  //         doc.save("download.pdf"); // Save the PDF with a custom name
-  //       },
-  //       margin: [1, 1, 1, 1],
-  //       x: 1,
-  //       y: 1,
-  //     });
-  //   };
+    const exportToPDF = () => {
+      // Switch to PDF mode to use Rs. instead of ₹
+      setIsPdfMode(true);
+      
+      // Small delay to ensure state update is rendered
+      setTimeout(() => {
+        const doc = new jsPDF("l", "pt", "a3");
+        
+        // Set font to support Unicode characters
+        doc.setFont("helvetica");
+        
+        // Use HTML to PDF with better Unicode handling
+        doc.html(contentRef.current, {
+          callback: function (doc) {
+            doc.save("EMI_Calculation_Result.pdf");
+            // Switch back to web mode after PDF generation
+            setIsPdfMode(false);
+          },
+          margin: [20, 20, 20, 20],
+          x: 20,
+          y: 20,
+          width: 1150,
+          windowWidth: 1200,
+        });
+      }, 100);
+    };
 
   const {
     plan,
-    total_cost,
-    total_cost_with_tax,
-    total_fee,
-    grand_total,
+    totalCost,
+    totalCostWithTax,
+    totalFee,
+    grandTotal,
     extra,
     emidisc,
   } = data;
+
+  // Currency symbol based on mode
+  const currencySymbol = isPdfMode ? "Rs." : "₹";
 
   return (
     <div className="w-full bg-white shadow-md rounded-lg p-6 mt-8">
@@ -47,27 +65,27 @@ const EmiResult = ({ data }) => {
         {/* Summary Section */}
         <div className="mb-6 grid grid-cols-2 gap-4 text-gray-700">
           <div>
-            <strong>Total Cost:</strong> ₹{total_cost}
+            <strong>Total Cost:</strong> {currencySymbol}{totalCost}
           </div>
           <div>
-            <strong>Total Cost with Tax:</strong> ₹{total_cost_with_tax}
+            <strong>Total Cost with Tax:</strong> {currencySymbol}{totalCostWithTax}
           </div>
           <div>
-            <strong>Total Fee(incl. fee):</strong> ₹{total_fee}
+            <strong>Total Fee(incl. fee):</strong> {currencySymbol}{totalFee}
           </div>
           <div>
-            <strong>Grand Total (incl. Fee):</strong> ₹{grand_total}
+            <strong>Grand Total (incl. Fee):</strong> {currencySymbol}{grandTotal}
           </div>
           <div>
-            <strong>Extra:</strong> ₹{extra}
+            <strong>Extra:</strong> {currencySymbol}{extra}
           </div>
           <div>
-            <strong>EMI Discount:</strong> ₹{emidisc}
+            <strong>EMI Discount:</strong> {currencySymbol}{emidisc}
           </div>
         </div>
 
         {/* EMI Plan Table */}
-        <div className="overflow-auto max-h-96">
+        <div className="overflow-auto">
           <h3 className="text-lg font-semibold mb-2 text-gray-700">EMI Plan</h3>
           <table className="w-full table-auto border-collapse border border-gray-200 text-sm">
             <thead>
@@ -121,12 +139,12 @@ const EmiResult = ({ data }) => {
         </div>
       </div>
       <div className="w-full">
-        {/* <button
+        <button
           className="bg-blue-500 p-5 mx-auto block text-white py-2 rounded-md hover:bg-blue-600"
           onClick={exportToPDF}
         >
           Export to PDF
-        </button> */}
+        </button>
       </div>
     </div>
   );

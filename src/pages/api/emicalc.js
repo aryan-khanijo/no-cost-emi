@@ -48,21 +48,21 @@ const calculate = ({ price: p, roi, numoi: n, nocostemi, fee }) => {
       tpmit: Math.round(tpmit),
     };
   });
-  let total_cost_with_tax = 0;
-  let total_cost = 0;
+  let totalCostWithTax = 0;
+  let totalCost = 0;
   plan.forEach((p) => {
-    total_cost += p.emi;
-    total_cost_with_tax += p.tpmit;
+    totalCost += p.emi;
+    totalCostWithTax += p.tpmit;
   });
-  const total_fee = Math.round(1.18 * fee);
-  const grand_total = total_cost_with_tax + total_fee;
-  const extra = Math.round(grand_total - p);
+  const totalFee = Math.round(1.18 * fee);
+  const grandTotal = totalCostWithTax + totalFee;
+  const extra = Math.round(grandTotal - p - emidisc);
   return {
     plan,
-    total_cost,
-    total_cost_with_tax,
-    total_fee,
-    grand_total,
+    totalCost,
+    totalCostWithTax,
+    totalFee,
+    grandTotal,
     extra,
     emidisc,
   };
