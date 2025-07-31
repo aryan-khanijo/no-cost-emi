@@ -138,7 +138,7 @@ const EmiResult = ({ data }) => {
           </table>
         </div>
       </div>
-      <div className="w-full">
+      <div className="w-full my-[1%]">
         <button
           className="bg-blue-500 p-5 mx-auto block text-white py-2 rounded-md hover:bg-blue-600"
           onClick={exportToPDF}
