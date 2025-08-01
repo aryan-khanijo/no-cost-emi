@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 import EmiResult from "@/components/emiresult";
+import ThemeToggle from "@/components/ThemeToggle";
+import EMIForm from "@/components/EMIForm";
+import ErrorDisplay from "@/components/ErrorDisplay";
+import PageTitle from "@/components/PageTitle";
 import "@/styles/globals.css";
 
 const EmiCalculator = () => {
@@ -13,6 +17,11 @@ const EmiCalculator = () => {
   });
   const [response, setResponse] = useState(null);
   const [error, setError] = useState("");
+  const [isDarkMode, setIsDarkMode] = useState(true);
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -34,77 +43,23 @@ const EmiCalculator = () => {
   };
 
   return (
-    <div className="w-full container mx-auto p-6">
-      <h1 className="text-3xl font-bold text-center text-blue-600 mb-4">
-        EMI Calculator
-      </h1>
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white shadow-lg rounded-lg p-6 w-full"
-      >
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          <div>
-            <label className="block text-gray-700">Price:</label>
-            <input
-              type="number"
-              name="price"
-              value={formData.price}
-              onChange={handleChange}
-              className="w-full border-gray-300 text-gray-900 rounded-md p-2"
-            />
-          </div>
-          <div>
-            <label className="block text-gray-700">Interest (%):</label>
-            <input
-              type="number"
-              name="roi"
-              value={formData.roi}
-              onChange={handleChange}
-              className="w-full border-gray-300 text-gray-900 rounded-md p-2"
-            />
-          </div>
-          <div>
-            <label className="block text-gray-700">Installments:</label>
-            <input
-              type="number"
-              name="numoi"
-              value={formData.numoi}
-              onChange={handleChange}
-              className="w-full border-gray-300 text-gray-900 rounded-md p-2"
-            />
-          </div>
-          <div>
-            <label className="block text-gray-700">Processing Fee:</label>
-            <input
-              type="number"
-              name="fee"
-              value={formData.fee}
-              onChange={handleChange}
-              className="w-full border-gray-300 text-gray-900 rounded-md p-2"
-            />
-          </div>
-          <div className="col-span-2 flex items-center">
-            <input
-              type="checkbox"
-              name="nocostemi"
-              checked={formData.nocostemi}
-              onChange={handleChange}
-              className="mr-2"
-            />
-            <label className="text-gray-700">No Cost EMI</label>
-          </div>
-        </div>
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
-        >
-          Calculate EMI
-        </button>
-      </form>
-
-      {error && <div className="text-red-500 mt-4 text-center">{error}</div>}
-
-      {response && <EmiResult data={response} />}
+    <div className={`min-h-screen py-8 transition-all duration-300 ${
+      isDarkMode 
+        ? 'bg-gradient-to-br from-slate-900 via-gray-900 to-indigo-900' 
+        : 'bg-gradient-to-br from-indigo-50 via-white to-purple-50'
+    }`}>
+      <div className="w-full container mx-auto p-6">
+        <ThemeToggle isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
+        <PageTitle isDarkMode={isDarkMode} />
+        <EMIForm 
+          formData={formData}
+          handleChange={handleChange}
+          handleSubmit={handleSubmit}
+          isDarkMode={isDarkMode}
+        />
+        <ErrorDisplay error={error} isDarkMode={isDarkMode} />
+        {response && <EmiResult data={response} isDarkMode={isDarkMode} />}
+      </div>
     </div>
   );
 };
