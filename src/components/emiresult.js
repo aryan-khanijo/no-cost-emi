@@ -285,26 +285,100 @@ const EmiResult = ({ data, isDarkMode = false }) => {
     }
   };
 
-  // Helper function to create summary card
-  const SummaryCard = ({ title, value, colorPrefix }) => (
-    <div className={`p-4 rounded-lg border-l-4 transition-all duration-300 ${
-      getThemeClasses(`bg-${colorPrefix}-50 border-${colorPrefix}-400`, `bg-${colorPrefix}-900 border-${colorPrefix}-500`)
-    }`}>
-      <strong className={getThemeClasses(`text-${colorPrefix}-700`, `text-${colorPrefix}-300`)}>
-        {title}:
-      </strong> 
-      <span className={`font-semibold ml-2 ${getThemeClasses(`text-${colorPrefix}-800`, `text-${colorPrefix}-200`)}`}>
-        {currencySymbol}{value}
-      </span>
-    </div>
-  );
+  // Helper function to create summary card with explicit colors
+  const SummaryCard = ({ title, value, colorPrefix }) => {
+    const colorMap = {
+      emerald: {
+        lightBg: 'bg-emerald-50',
+        lightBorder: 'border-emerald-400',
+        lightTitle: 'text-emerald-700',
+        lightValue: 'text-emerald-800',
+        darkBg: 'bg-emerald-900',
+        darkBorder: 'border-emerald-500',
+        darkTitle: 'text-emerald-300',
+        darkValue: 'text-emerald-200'
+      },
+      blue: {
+        lightBg: 'bg-blue-50',
+        lightBorder: 'border-blue-400',
+        lightTitle: 'text-blue-700',
+        lightValue: 'text-blue-800',
+        darkBg: 'bg-blue-900',
+        darkBorder: 'border-blue-500',
+        darkTitle: 'text-blue-300',
+        darkValue: 'text-blue-200'
+      },
+      amber: {
+        lightBg: 'bg-amber-50',
+        lightBorder: 'border-amber-400',
+        lightTitle: 'text-amber-700',
+        lightValue: 'text-amber-800',
+        darkBg: 'bg-amber-900',
+        darkBorder: 'border-amber-500',
+        darkTitle: 'text-amber-300',
+        darkValue: 'text-amber-200'
+      },
+      purple: {
+        lightBg: 'bg-purple-50',
+        lightBorder: 'border-purple-400',
+        lightTitle: 'text-purple-700',
+        lightValue: 'text-purple-800',
+        darkBg: 'bg-purple-900',
+        darkBorder: 'border-purple-500',
+        darkTitle: 'text-purple-300',
+        darkValue: 'text-purple-200'
+      },
+      rose: {
+        lightBg: 'bg-rose-50',
+        lightBorder: 'border-rose-400',
+        lightTitle: 'text-rose-700',
+        lightValue: 'text-rose-800',
+        darkBg: 'bg-rose-900',
+        darkBorder: 'border-rose-500',
+        darkTitle: 'text-rose-300',
+        darkValue: 'text-rose-200'
+      },
+      cyan: {
+        lightBg: 'bg-cyan-50',
+        lightBorder: 'border-cyan-400',
+        lightTitle: 'text-cyan-700',
+        lightValue: 'text-cyan-800',
+        darkBg: 'bg-cyan-900',
+        darkBorder: 'border-cyan-500',
+        darkTitle: 'text-cyan-300',
+        darkValue: 'text-cyan-200'
+      }
+    };
+
+    const colors = colorMap[colorPrefix] || colorMap.blue;
+    const isLight = isPdfMode || !isDarkMode;
+
+    return (
+      <div className={`p-4 rounded-lg border-l-4 transition-colors duration-200 ${
+        isLight 
+          ? `${colors.lightBg} ${colors.lightBorder}` 
+          : `${colors.darkBg} ${colors.darkBorder}`
+      }`}>
+        <div className="flex flex-col space-y-1">
+          <strong className={isLight ? colors.lightTitle : colors.darkTitle}>
+            {title}:
+          </strong> 
+          <span className={`font-semibold text-lg ${
+            isLight ? colors.lightValue : colors.darkValue
+          }`}>
+            {currencySymbol}{value}
+          </span>
+        </div>
+      </div>
+    );
+  };
 
   return (
-    <div className={`w-full shadow-xl rounded-2xl p-8 mt-8 border transition-all duration-300 ${
+    <div className={`w-full shadow-xl rounded-2xl p-8 mt-8 border transition-colors duration-200 ${
       getThemeClasses('bg-white border-indigo-100', 'bg-slate-800 border-slate-600')
     }`}>
       <div
-        className={`w-full shadow-lg rounded-xl p-8 border transition-all duration-300 ${
+        className={`w-full shadow-lg rounded-xl p-8 border transition-colors duration-200 ${
           getThemeClasses('bg-gray-50 border-gray-200', 'bg-slate-700 border-slate-500')
         }`}
         ref={contentRef}
@@ -317,7 +391,7 @@ const EmiResult = ({ data, isDarkMode = false }) => {
             💰 EMI Calculation Result
           </h2>
 
-          <div className="mb-8 grid grid-cols-2 gap-6">
+          <div className="mb-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
             <SummaryCard title="Total Cost" value={totalCost} colorPrefix="emerald" />
             <SummaryCard title="Total Cost with Tax" value={totalCostWithTax} colorPrefix="blue" />
             <SummaryCard title="Total Fee(incl. fee)" value={totalFee} colorPrefix="amber" />
@@ -328,10 +402,10 @@ const EmiResult = ({ data, isDarkMode = false }) => {
         </div>
 
         {/* EMI Plan Table */}
-        <div id="table-section" className={`overflow-auto rounded-xl shadow-inner border transition-all duration-300 ${
+        <div id="table-section" className={`overflow-auto rounded-xl shadow-inner border transition-colors duration-200 ${
           getThemeClasses('bg-white border-slate-200', 'bg-slate-800 border-slate-600')
         }`}>
-          <h3 className={`text-xl font-semibold mb-4 p-4 rounded-t-xl border-b transition-all duration-300 ${
+          <h3 className={`text-xl font-semibold mb-4 p-4 rounded-t-xl border-b transition-colors duration-200 ${
             getThemeClasses('text-slate-700 bg-slate-100 border-slate-200', 'text-slate-300 bg-slate-700 border-slate-600')
           }`}>
             📊 EMI Plan Breakdown
@@ -415,7 +489,7 @@ const EmiResult = ({ data, isDarkMode = false }) => {
       </div>
       <div className="w-full mt-6">
         <button
-          className={`font-semibold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 mx-auto block border-0 focus:ring-4 ${
+          className={`font-semibold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-150 mx-auto block border-0 focus:ring-4 ${
             isDarkMode
               ? 'bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-700 hover:to-cyan-700 text-white focus:ring-purple-400/30'
               : 'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white focus:ring-indigo-300'
