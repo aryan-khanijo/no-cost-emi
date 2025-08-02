@@ -4,11 +4,7 @@ const EMIForm = ({ formData, handleChange, handleSubmit, isDarkMode }) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className={`shadow-xl rounded-2xl p-8 w-full border mb-8 backdrop-blur-sm transition-all duration-300 ${
-        isDarkMode
-          ? 'bg-slate-800/90 border-slate-600/50'
-          : 'bg-white/80 border-white/20'
-      }`}
+      className={`rounded-2xl p-8 w-full mb-8 transition-all duration-300`}
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         {/* Price Input */}

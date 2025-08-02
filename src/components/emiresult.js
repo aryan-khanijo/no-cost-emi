@@ -9,7 +9,7 @@ const EmiResult = ({ data, isDarkMode = false }) => {
   const [isPdfMode, setIsPdfMode] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [toast, setToast] = useState({ message: '', type: 'error', isVisible: false });
-  
+
   if (!data)
     return (
       <div className="text-center text-gray-500">
@@ -23,25 +23,25 @@ const EmiResult = ({ data, isDarkMode = false }) => {
     if (typeof window === 'undefined') {
       throw new Error('PDF export is not available in server-side environment');
     }
-    
+
     if (!window.HTMLCanvasElement) {
       throw new Error('Canvas support is required for PDF export');
     }
-    
+
     if (!html2canvas) {
       throw new Error('html2canvas library failed to load');
     }
-    
+
     if (!jsPDF) {
       throw new Error('jsPDF library failed to load');
     }
-    
+
     // Check for required canvas features
     const canvas = document.createElement('canvas');
     if (!canvas.getContext || !canvas.getContext('2d')) {
       throw new Error('2D canvas context is not supported');
     }
-    
+
     return true;
   };
 
@@ -71,7 +71,7 @@ const EmiResult = ({ data, isDarkMode = false }) => {
       return await html2canvas(element, options);
     } catch (error) {
       console.warn('html2canvas failed with full options, trying with reduced options:', error);
-      
+
       // Fallback with minimal options
       const fallbackOptions = {
         scale: 1, // Reduce scale
@@ -82,7 +82,7 @@ const EmiResult = ({ data, isDarkMode = false }) => {
         width: element.offsetWidth,
         height: element.offsetHeight
       };
-      
+
       try {
         return await html2canvas(element, fallbackOptions);
       } catch (fallbackError) {
@@ -92,123 +92,123 @@ const EmiResult = ({ data, isDarkMode = false }) => {
     }
   };
 
-    const exportToPDF = async () => {
-      if (isExporting) return; // Prevent multiple simultaneous exports
-      
-      try {
-        setIsExporting(true);
-        
-        // Check browser compatibility first
-        checkCompatibility();
-        
-        // Ensure content reference exists
-        if (!contentRef.current) {
-          throw new Error('Content reference is not available');
-        }
-        // Enable PDF mode to force light styling
-        setIsPdfMode(true);
-        
-        // Wait for the DOM to update with new styles
-        await new Promise(resolve => {
-          requestAnimationFrame(() => {
-            setTimeout(resolve, 200);
-          });
-        });
-        
-        // Create PDF instance
-        const pdf = new jsPDF('l', 'mm', 'a4');
-        
-        // Define margins and page dimensions
-        const pageWidth = 297;
-        const pageHeight = 210;
-        const marginTop = 15;
-        const marginBottom = 15;
-        const marginLeft = 10;
-        const marginRight = 10;
-        
-        const usableWidth = pageWidth - marginLeft - marginRight;
-        const usableHeight = pageHeight - marginTop - marginBottom;
-        
-        // Check if we need to separate the table to next page
-        const shouldSeparateTable = plan.length > TABLE_SEPARATION_THRESHOLD;
-        
-        if (shouldSeparateTable) {
-          // Create separate canvases for summary and table
-          const summarySection = contentRef.current.querySelector('#summary-section');
-          const tableSection = contentRef.current.querySelector('#table-section');
-          
-          // Always use light mode for PDF export
-          const backgroundColor = '#ffffff';
-          
-          // Check if sections exist
-          if (!summarySection || !tableSection) {
-            throw new Error('Required content sections not found');
-          }
-          
-          // Capture both sections with error handling
-          const summaryCanvas = await captureElementWithFallback(summarySection, getCanvasOptions(summarySection, backgroundColor));
-          const tableCanvas = await captureElementWithFallback(tableSection, getCanvasOptions(tableSection, backgroundColor));
-          
-          // Add summary to first page
-          const summaryImgData = summaryCanvas.toDataURL('image/png');
-          const summaryImgWidth = usableWidth;
-          const summaryImgHeight = (summaryCanvas.height * summaryImgWidth) / summaryCanvas.width;
-          
-          pdf.addImage(
-            summaryImgData,
-            'PNG',
-            marginLeft,
-            marginTop,
-            summaryImgWidth,
-            Math.min(summaryImgHeight, usableHeight)
-          );
-          
-          // Add new page for table
-          pdf.addPage();
-          
-          // Add table using helper function
-          addCanvasToPDF(pdf, tableCanvas, marginLeft, marginTop, usableWidth, usableHeight, backgroundColor);
-          
-        } else {
-          // Original logic for content with 5 or fewer rows
-          const backgroundColor = '#ffffff';
-          const canvas = await captureElementWithFallback(contentRef.current, getCanvasOptions(contentRef.current, backgroundColor));
-          
-          // Add content using helper function
-          addCanvasToPDF(pdf, canvas, marginLeft, marginTop, usableWidth, usableHeight, backgroundColor);
-        }
-        
-        // Save the PDF
-        pdf.save("EMI_Calculation_Result.pdf");
-        
-        // Show success message
-        showSuccessMessage('PDF has been generated and downloaded successfully!');
-        
-      } catch (error) {
-        console.error('PDF generation error:', error);
-        
-        // Show user-friendly error message
-        let userMessage = 'Failed to generate PDF. ';
-        
-        if (error.message.includes('Canvas support')) {
-          userMessage += 'Your browser does not support the required features.';
-        } else if (error.message.includes('CORS')) {
-          userMessage += 'Security restrictions prevented content capture.';
-        } else if (error.message.includes('html2canvas')) {
-          userMessage += 'Content capture failed. Try using a different browser.';
-        } else if (error.message.includes('jsPDF')) {
-          userMessage += 'PDF generation library error.';
-        } else {
-          userMessage += 'Please try again or contact support.';
-        }
-        
-        showErrorMessage(userMessage);
-      } finally {
-        // Always disable PDF mode and export state after export
-        setIsPdfMode(false);
-        setIsExporting(false);
+  const exportToPDF = async () => {
+    if (isExporting) return; // Prevent multiple simultaneous exports
+
+    try {
+      setIsExporting(true);
+
+      // Check browser compatibility first
+      checkCompatibility();
+
+      // Ensure content reference exists
+      if (!contentRef.current) {
+        throw new Error('Content reference is not available');
       }
-    };
+      // Enable PDF mode to force light styling
+      setIsPdfMode(true);
+
+      // Wait for the DOM to update with new styles
+      await new Promise(resolve => {
+        requestAnimationFrame(() => {
+          setTimeout(resolve, 200);
+        });
+      });
+
+      // Create PDF instance
+      const pdf = new jsPDF('l', 'mm', 'a4');
+
+      // Define margins and page dimensions
+      const pageWidth = 297;
+      const pageHeight = 210;
+      const marginTop = 15;
+      const marginBottom = 15;
+      const marginLeft = 10;
+      const marginRight = 10;
+
+      const usableWidth = pageWidth - marginLeft - marginRight;
+      const usableHeight = pageHeight - marginTop - marginBottom;
+
+      // Check if we need to separate the table to next page
+      const shouldSeparateTable = plan.length > TABLE_SEPARATION_THRESHOLD;
+
+      if (shouldSeparateTable) {
+        // Create separate canvases for summary and table
+        const summarySection = contentRef.current.querySelector('#summary-section');
+        const tableSection = contentRef.current.querySelector('#table-section');
+
+        // Always use light mode for PDF export
+        const backgroundColor = '#ffffff';
+
+        // Check if sections exist
+        if (!summarySection || !tableSection) {
+          throw new Error('Required content sections not found');
+        }
+
+        // Capture both sections with error handling
+        const summaryCanvas = await captureElementWithFallback(summarySection, getCanvasOptions(summarySection, backgroundColor));
+        const tableCanvas = await captureElementWithFallback(tableSection, getCanvasOptions(tableSection, backgroundColor));
+
+        // Add summary to first page
+        const summaryImgData = summaryCanvas.toDataURL('image/png');
+        const summaryImgWidth = usableWidth;
+        const summaryImgHeight = (summaryCanvas.height * summaryImgWidth) / summaryCanvas.width;
+
+        pdf.addImage(
+          summaryImgData,
+          'PNG',
+          marginLeft,
+          marginTop,
+          summaryImgWidth,
+          Math.min(summaryImgHeight, usableHeight)
+        );
+
+        // Add new page for table
+        pdf.addPage();
+
+        // Add table using helper function
+        addCanvasToPDF(pdf, tableCanvas, marginLeft, marginTop, usableWidth, usableHeight, backgroundColor);
+
+      } else {
+        // Original logic for content with 5 or fewer rows
+        const backgroundColor = '#ffffff';
+        const canvas = await captureElementWithFallback(contentRef.current, getCanvasOptions(contentRef.current, backgroundColor));
+
+        // Add content using helper function
+        addCanvasToPDF(pdf, canvas, marginLeft, marginTop, usableWidth, usableHeight, backgroundColor);
+      }
+
+      // Save the PDF
+      pdf.save("EMI_Calculation_Result.pdf");
+
+      // Show success message
+      showSuccessMessage('PDF has been generated and downloaded successfully!');
+
+    } catch (error) {
+      console.error('PDF generation error:', error);
+
+      // Show user-friendly error message
+      let userMessage = 'Failed to generate PDF. ';
+
+      if (error.message.includes('Canvas support')) {
+        userMessage += 'Your browser does not support the required features.';
+      } else if (error.message.includes('CORS')) {
+        userMessage += 'Security restrictions prevented content capture.';
+      } else if (error.message.includes('html2canvas')) {
+        userMessage += 'Content capture failed. Try using a different browser.';
+      } else if (error.message.includes('jsPDF')) {
+        userMessage += 'PDF generation library error.';
+      } else {
+        userMessage += 'Please try again or contact support.';
+      }
+
+      showErrorMessage(userMessage);
+    } finally {
+      // Always disable PDF mode and export state after export
+      setIsPdfMode(false);
+      setIsExporting(false);
+    }
+  };
 
   const {
     plan,
@@ -355,18 +355,16 @@ const EmiResult = ({ data, isDarkMode = false }) => {
     const isLight = isPdfMode || !isDarkMode;
 
     return (
-      <div className={`p-4 rounded-lg border-l-4 transition-colors duration-200 ${
-        isLight 
-          ? `${colors.lightBg} ${colors.lightBorder}` 
+      <div className={`p-4 rounded-lg border-l-4 transition-colors duration-200 ${isLight
+          ? `${colors.lightBg} ${colors.lightBorder}`
           : `${colors.darkBg} ${colors.darkBorder}`
-      }`}>
+        }`}>
         <div className="flex flex-col space-y-1">
           <strong className={isLight ? colors.lightTitle : colors.darkTitle}>
             {title}:
-          </strong> 
-          <span className={`font-semibold text-lg ${
-            isLight ? colors.lightValue : colors.darkValue
-          }`}>
+          </strong>
+          <span className={`font-semibold text-lg ${isLight ? colors.lightValue : colors.darkValue
+            }`}>
             {currencySymbol}{value}
           </span>
         </div>
@@ -375,22 +373,20 @@ const EmiResult = ({ data, isDarkMode = false }) => {
   };
 
   return (
-    <div className={`w-full shadow-xl rounded-2xl p-8 mt-8 border transition-colors duration-200 ${
-      getThemeClasses('bg-white border-indigo-100', 'bg-slate-800 border-slate-600')
-    }`}>
+    <div className={`w-full rounded-2xl p-8 mt-8 transition-colors duration-200`}>
       <div
-        className={`w-full shadow-lg rounded-xl p-8 border transition-colors duration-200 ${
-          getThemeClasses('bg-gray-50 border-gray-200', 'bg-slate-700 border-slate-500')
-        }`}
+        className={`w-full rounded-xl p-8 transition-colors duration-200`}
         ref={contentRef}
       >
         {/* Summary Section */}
         <div id="summary-section">
-          <h2 className={`text-3xl font-bold text-center mb-6 ${
-            getThemeClasses('text-indigo-700', 'text-purple-300')
-          }`}>
-            💰 EMI Calculation Result
-          </h2>
+          <h1 className={`text-3xl font-bold text-center mb-6
+            }`}>
+            💰 <span className={`bg-gradient-to-r bg-clip-text text-transparent ${getThemeClasses('from-indigo-600 to-purple-600', 'from-purple-400 to-cyan-400')
+              }`}>
+              EMI Calculator
+            </span>
+          </h1>
 
           <div className="mb-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
             <SummaryCard title="Total Cost" value={totalCost} colorPrefix="emerald" />
@@ -403,36 +399,31 @@ const EmiResult = ({ data, isDarkMode = false }) => {
         </div>
 
         {/* EMI Plan Table */}
-        <div id="table-section" className={`overflow-auto rounded-xl shadow-inner border transition-colors duration-200 ${
-          getThemeClasses('bg-white border-slate-200', 'bg-slate-800 border-slate-600')
-        }`}>
-          <h3 className={`text-xl font-semibold mb-4 p-4 rounded-t-xl border-b transition-colors duration-200 ${
-            getThemeClasses('text-slate-700 bg-slate-100 border-slate-200', 'text-slate-300 bg-slate-700 border-slate-600')
+        <div id="table-section" className={`overflow-auto rounded-xl shadow-inner border transition-colors duration-200 ${getThemeClasses('bg-white border-slate-200', 'bg-slate-800 border-slate-600')
           }`}>
+          <h3 className={`text-xl font-semibold mb-4 p-4 rounded-t-xl border-b transition-colors duration-200 ${getThemeClasses('text-slate-700 bg-slate-100 border-slate-200', 'text-slate-300 bg-slate-700 border-slate-600')
+            }`}>
             📊 EMI Plan Breakdown
           </h3>
           <div className="p-4">
-            <table className={`w-full table-auto border-collapse border text-sm rounded-lg overflow-hidden ${
-              getThemeClasses('border-slate-300', 'border-slate-600')
-            }`}>
+            <table className={`w-full table-auto border-collapse border text-sm rounded-lg overflow-hidden ${getThemeClasses('border-slate-300', 'border-slate-600')
+              }`}>
               <thead>
-                <tr className={`text-white ${
-                  getThemeClasses('bg-indigo-600', 'bg-purple-700')
-                }`}>
+                <tr className={`text-white ${getThemeClasses('bg-indigo-600', 'bg-purple-700')
+                  }`}>
                   {[
                     "Month",
                     "EMI",
                     "Principle",
-                    "Interest", 
+                    "Interest",
                     "Balance",
                     "Tax on Interest",
                     "Total Per Month",
                   ].map((header) => (
                     <th
                       key={header}
-                      className={`border p-3 font-semibold text-center ${
-                        getThemeClasses('border-indigo-500', 'border-purple-500')
-                      }`}
+                      className={`border p-3 font-semibold text-center ${getThemeClasses('border-indigo-500', 'border-purple-500')
+                        }`}
                     >
                       {header}
                     </th>
@@ -441,44 +432,36 @@ const EmiResult = ({ data, isDarkMode = false }) => {
               </thead>
               <tbody>
                 {plan.map((item, index) => (
-                  <tr key={item.month} className={`transition-colors duration-200 ${
-                    index % 2 === 0 
+                  <tr key={item.month} className={`transition-colors duration-200 ${index % 2 === 0
                       ? getThemeClasses('bg-slate-50', 'bg-slate-700')
                       : getThemeClasses('bg-white', 'bg-slate-800')
-                  } ${getThemeClasses('hover:bg-indigo-50', 'hover:bg-purple-800')}`}>
-                    <td className={`border p-3 text-center font-medium ${
-                      getThemeClasses('border-slate-300 text-slate-700', 'border-slate-600 text-slate-300')
-                    }`}>
+                    } ${getThemeClasses('hover:bg-indigo-50', 'hover:bg-purple-800')}`}>
+                    <td className={`border p-3 text-center font-medium ${getThemeClasses('border-slate-300 text-slate-700', 'border-slate-600 text-slate-300')
+                      }`}>
                       {item.month}
                     </td>
-                    <td className={`border p-3 text-center font-semibold ${
-                      getThemeClasses('border-slate-300 text-emerald-700', 'border-slate-600 text-emerald-300')
-                    }`}>
+                    <td className={`border p-3 text-center font-semibold ${getThemeClasses('border-slate-300 text-emerald-700', 'border-slate-600 text-emerald-300')
+                      }`}>
                       {item.emi}
                     </td>
-                    <td className={`border p-3 text-center ${
-                      getThemeClasses('border-slate-300 text-blue-700', 'border-slate-600 text-blue-300')
-                    }`}>
+                    <td className={`border p-3 text-center ${getThemeClasses('border-slate-300 text-blue-700', 'border-slate-600 text-blue-300')
+                      }`}>
                       {item.ppm}
                     </td>
-                    <td className={`border p-3 text-center ${
-                      getThemeClasses('border-slate-300 text-amber-700', 'border-slate-600 text-amber-300')
-                    }`}>
+                    <td className={`border p-3 text-center ${getThemeClasses('border-slate-300 text-amber-700', 'border-slate-600 text-amber-300')
+                      }`}>
                       {item.ipm}
                     </td>
-                    <td className={`border p-3 text-center ${
-                      getThemeClasses('border-slate-300 text-purple-700', 'border-slate-600 text-purple-300')
-                    }`}>
+                    <td className={`border p-3 text-center ${getThemeClasses('border-slate-300 text-purple-700', 'border-slate-600 text-purple-300')
+                      }`}>
                       {item.balance}
                     </td>
-                    <td className={`border p-3 text-center ${
-                      getThemeClasses('border-slate-300 text-rose-700', 'border-slate-600 text-rose-300')
-                    }`}>
+                    <td className={`border p-3 text-center ${getThemeClasses('border-slate-300 text-rose-700', 'border-slate-600 text-rose-300')
+                      }`}>
                       {item.toi}
                     </td>
-                    <td className={`border p-3 text-center font-semibold ${
-                      getThemeClasses('border-slate-300 text-indigo-700', 'border-slate-600 text-indigo-300')
-                    }`}>
+                    <td className={`border p-3 text-center font-semibold ${getThemeClasses('border-slate-300 text-indigo-700', 'border-slate-600 text-indigo-300')
+                      }`}>
                       {item.tpmit}
                     </td>
                   </tr>
@@ -490,11 +473,10 @@ const EmiResult = ({ data, isDarkMode = false }) => {
       </div>
       <div className="w-full mt-6">
         <button
-          className={`font-semibold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-150 mx-auto block border-0 focus:ring-4 ${
-            isDarkMode
+          className={`font-semibold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-150 mx-auto block border-0 focus:ring-4 ${isDarkMode
               ? 'bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-700 hover:to-cyan-700 text-white focus:ring-purple-400/30'
               : 'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white focus:ring-indigo-300'
-          } ${isExporting ? 'opacity-50 cursor-not-allowed' : ''}`}
+            } ${isExporting ? 'opacity-50 cursor-not-allowed' : ''}`}
           onClick={exportToPDF}
           disabled={isExporting}
         >
