@@ -5,6 +5,7 @@ import Toast from "./Toast";
 
 const EmiResult = ({ data, isDarkMode = false }) => {
   const contentRef = useRef();
+  const TABLE_SEPARATION_THRESHOLD = 3; // Threshold for separating table into pages
   const [isPdfMode, setIsPdfMode] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [toast, setToast] = useState({ message: '', type: 'error', isVisible: false });
@@ -129,7 +130,7 @@ const EmiResult = ({ data, isDarkMode = false }) => {
         const usableHeight = pageHeight - marginTop - marginBottom;
         
         // Check if we need to separate the table to next page
-        const shouldSeparateTable = plan.length > 5;
+        const shouldSeparateTable = plan.length > TABLE_SEPARATION_THRESHOLD;
         
         if (shouldSeparateTable) {
           // Create separate canvases for summary and table
@@ -293,7 +294,7 @@ const EmiResult = ({ data, isDarkMode = false }) => {
         lightBorder: 'border-emerald-400',
         lightTitle: 'text-emerald-700',
         lightValue: 'text-emerald-800',
-        darkBg: 'bg-emerald-900',
+        darkBg: 'bg-emerald-900/60',
         darkBorder: 'border-emerald-500',
         darkTitle: 'text-emerald-300',
         darkValue: 'text-emerald-200'
@@ -303,7 +304,7 @@ const EmiResult = ({ data, isDarkMode = false }) => {
         lightBorder: 'border-blue-400',
         lightTitle: 'text-blue-700',
         lightValue: 'text-blue-800',
-        darkBg: 'bg-blue-900',
+        darkBg: 'bg-blue-900/60',
         darkBorder: 'border-blue-500',
         darkTitle: 'text-blue-300',
         darkValue: 'text-blue-200'
@@ -313,7 +314,7 @@ const EmiResult = ({ data, isDarkMode = false }) => {
         lightBorder: 'border-amber-400',
         lightTitle: 'text-amber-700',
         lightValue: 'text-amber-800',
-        darkBg: 'bg-amber-900',
+        darkBg: 'bg-amber-900/60',
         darkBorder: 'border-amber-500',
         darkTitle: 'text-amber-300',
         darkValue: 'text-amber-200'
@@ -323,7 +324,7 @@ const EmiResult = ({ data, isDarkMode = false }) => {
         lightBorder: 'border-purple-400',
         lightTitle: 'text-purple-700',
         lightValue: 'text-purple-800',
-        darkBg: 'bg-purple-900',
+        darkBg: 'bg-purple-900/60',
         darkBorder: 'border-purple-500',
         darkTitle: 'text-purple-300',
         darkValue: 'text-purple-200'
@@ -333,7 +334,7 @@ const EmiResult = ({ data, isDarkMode = false }) => {
         lightBorder: 'border-rose-400',
         lightTitle: 'text-rose-700',
         lightValue: 'text-rose-800',
-        darkBg: 'bg-rose-900',
+        darkBg: 'bg-rose-900/60',
         darkBorder: 'border-rose-500',
         darkTitle: 'text-rose-300',
         darkValue: 'text-rose-200'
@@ -343,7 +344,7 @@ const EmiResult = ({ data, isDarkMode = false }) => {
         lightBorder: 'border-cyan-400',
         lightTitle: 'text-cyan-700',
         lightValue: 'text-cyan-800',
-        darkBg: 'bg-cyan-900',
+        darkBg: 'bg-cyan-900/60',
         darkBorder: 'border-cyan-500',
         darkTitle: 'text-cyan-300',
         darkValue: 'text-cyan-200'
